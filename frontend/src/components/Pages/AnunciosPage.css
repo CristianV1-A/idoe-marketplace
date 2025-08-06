@@ -1,0 +1,24 @@
+/* frontend/src/components/Pages/AnunciosPage.css */
+
+.anuncios-page {
+  width: 100%;
+  max-width: 1200px; /* Define uma largura máxima para o conteúdo */
+  margin: 0 auto; /* Centraliza a página */
+  padding: 20px;
+  box-sizing: border-box; /* Garante que o padding não aumente a largura total */
+}
+
+.anuncios-page h2 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 2em;
+  color: #333;
+}
+
+.anuncios-grid {
+  display: grid;
+  /* Cria colunas flexíveis. Cada uma terá no mínimo 280px e no máximo 1 fração do espaço.
+     Isso cria uma grade responsiva automaticamente! */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px; /* Espaçamento entre os cards */
+}
