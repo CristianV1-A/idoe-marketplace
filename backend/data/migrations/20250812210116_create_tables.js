@@ -53,6 +53,7 @@ exports.down = function(knex) {
   return knex.schema
     .dropTableIfExists('announcements')
     .dropTableIfExists('users');
+    
 };
 
 

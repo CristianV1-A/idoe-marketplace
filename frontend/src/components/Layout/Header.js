@@ -1,23 +1,39 @@
 // frontend/src/components/Layout/Header.js
 import React from 'react';
-import { Link } from 'react-router-dom'; // Importe o Link
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext'; // Importe o hook
 import './Header.css';
 
 function Header() {
+  const { isLoggedIn, user, logout } = useAuth(); // Pegue o estado e as funções
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login'); // Redireciona para o login após sair
+  };
+
   return (
     <header className="app-header">
-      {/* O Link para o logo leva para a página inicial */}
       <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
         <h1>iDoe</h1>
       </Link>
       <nav>
-        {/* Links para as outras páginas */}
         <Link to="/anuncios">Anúncios</Link>
-        <Link to="/cadastro">Cadastrar</Link> {/* Adicionaremos esta rota em breve */}
-        <Link to="/login">Login</Link>
+
+        {isLoggedIn ? (
+          <>
+            <span className="welcome-message">Olá, {user?.name}!</span>
+            <button onClick={handleLogout} className="logout-button">Sair</button>
+          </>
+        ) : (
+          <>
+            <Link to="/cadastro">Cadastrar</Link>
+            <Link to="/login">Login</Link>
+          </>
+        )}
       </nav>
     </header>
   );
 }
-
 export default Header;
