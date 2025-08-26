@@ -16,4 +16,34 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params; // Pega o ID da URL
+   try {
+    // Usamos .first() porque esperamos apenas um resultado
+    const anuncio = await db('announcements as a')
+      .join('users as u', 'a.user_id', 'u.id') // "Junta" a tabela de usuários
+      .select(
+        'a.id',
+        'a.title',
+        'a.location',
+        'a.image_url',
+        'a.creation_date',
+        'a.expiration_date',
+        'u.name as donor_name', // Seleciona o nome do usuário e o renomeia para 'donor_name'
+        'a.user_id' // Também pegamos o user_id para a lógica de "deletar" no frontend
+      )
+      .where('a.id', id)
+      .first();
+
+    if (anuncio) {
+      res.status(200).json(anuncio);
+    } else {
+      res.status(404).json({ message: 'Anúncio não encontrado.' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar anúncio.', error: error.message });
+  }
+});
+
+
 module.exports = router;
