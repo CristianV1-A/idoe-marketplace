@@ -1,5 +1,6 @@
 // frontend/src/components/Anuncios/DonationCard.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './DonationCard.css';
 
 // Usamos "props" para passar dados de um componente pai para um filho.
@@ -14,10 +15,11 @@ function DonationCard({ anuncio }) {
         <h3 className="card-title">{titulo}</h3>
         <p className="card-location">📍 {localidade}</p>
         <p className="card-date">Publicado em: {dataCriacao}</p>
-        <button className="card-button">Ver Detalhes & Chat</button>
+        <Link to={`/anuncios/${anuncio.id}`} className="card-button-link">
+          <button className="card-button">Ver Detalhes</button>
+        </Link>
       </div>
     </div>
   );
 }
-
 export default DonationCard;

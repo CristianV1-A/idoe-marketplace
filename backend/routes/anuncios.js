@@ -1,4 +1,5 @@
 // backend/routes/anuncios.js
+const authenticate = require('../middleware/authenticate');
 const express = require('express');
 const router = express.Router();
 const db = require('../db-config.js');
@@ -42,6 +43,29 @@ router.get('/:id', async (req, res) => {
     }
   } catch (error) {
     res.status(500).json({ message: 'Erro ao buscar anúncio.', error: error.message });
+  }
+});
+
+router.delete('/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const userIdFromToken = req.user.subject;
+
+  try {
+    const anuncio = await db('announcements').where({ id }).first();
+    if (!anuncio) {
+      return res.status(404).json({ message: 'Anúncio não encontrado.' });
+    }
+
+    // VERIFICAÇÃO DE SEGURANÇA CRUCIAL
+    if (anuncio.user_id !== userIdFromToken) {
+      return res.status(403).json({ message: 'Acesso negado. Você não é o dono deste anúncio.' });
+    }
+
+    await db('announcements').where({ id }).del();
+    res.status(200).json({ message: 'Anúncio deletado com sucesso.' });
+
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao deletar anúncio.', error: error.message });
   }
 });
 
